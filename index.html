@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام ديوني الاحترافي | النسخة الشاملة</title>
+    
     <link rel="stylesheet" href="style.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -14,6 +16,7 @@
     </div>
 
     <div id="app-wrapper">
+        
         <section id="view-home" class="view">
             <div class="hero-section">
                 <div class="logo-area">
@@ -21,6 +24,7 @@
                     <h1>نظام ديوني</h1>
                     <p>الإدارة المالية المتكاملة للمتاجر</p>
                 </div>
+                
                 <div class="main-actions">
                     <button class="btn-primary-large" onclick="ui.navigateTo('view-auth')">
                         <i class="fas fa-store"></i> بوابة التجار
@@ -37,23 +41,27 @@
                 <button onclick="ui.navigateTo('view-home')"><i class="fas fa-chevron-right"></i></button>
                 <h2>تسجيل الدخول / الاشتراك</h2>
             </header>
+
             <div class="auth-box">
                 <div class="tabs">
                     <button id="tab-login" class="active" onclick="ui.toggleAuth('login')">دخول</button>
                     <button id="tab-reg" onclick="ui.toggleAuth('reg')">إنشاء متجر</button>
                 </div>
+
                 <div id="form-login" class="auth-form">
                     <input type="tel" id="login-phone" placeholder="رقم الهاتف المسجل">
                     <button class="btn-action" onclick="app.login()">دخول للمتجر</button>
                 </div>
+
                 <div id="form-reg" class="auth-form hidden">
                     <input type="text" id="reg-name" placeholder="اسم المتجر">
                     <input type="email" id="reg-email" placeholder="البريد الإلكتروني">
                     <input type="tel" id="reg-phone" placeholder="رقم الهاتف">
                     <button class="btn-action" onclick="app.startRegistration()">إرسال كود التفعيل</button>
                 </div>
+
                 <div id="form-otp" class="auth-form hidden">
-                    <p>أدخل الرمز المرسل لبريدك</p>
+                    <p class="info-text">أدخل الرمز المكون من 4 أرقام</p>
                     <input type="number" id="otp-input" placeholder="0000">
                     <button class="btn-action" onclick="app.verifyAndCreate()">تأكيد الحساب</button>
                 </div>
@@ -63,18 +71,62 @@
         <section id="view-dash" class="view hidden">
             <header class="dash-nav">
                 <div class="user-info">
-                    <h3 id="store-display-name">تحميل...</h3>
-                    <span id="store-display-id" class="badge">--</span>
+                    <h3 id="store-display-name">اسم المتجر</h3>
+                    <span id="store-display-id" class="badge">ID: --</span>
                 </div>
                 <button class="logout-btn" onclick="location.reload()"><i class="fas fa-power-off"></i></button>
             </header>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="label">إجمالي الديون</span>
+                    <span class="value" id="stat-total-debts">0.00</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">العملاء</span>
+                    <span class="value" id="stat-customer-count">0</span>
+                </div>
+            </div>
+
             <div class="module-nav">
                 <button class="mod-btn active" onclick="app.loadModule('customers')">العملاء</button>
                 <button class="mod-btn" onclick="app.loadModule('debts')">الديون</button>
+                <button class="mod-btn" onclick="app.loadModule('suppliers')">الموردين</button>
+                <button class="mod-btn" onclick="app.loadModule('history')">السجل</button>
             </div>
-            <div id="module-list" class="data-list"></div>
-            <button class="fab" onclick="ui.openModal()"><i class="fas fa-plus"></i></button>
+
+            <div class="content-area">
+                <div id="module-list" class="data-list"></div>
+            </div>
+
+            <button class="fab" onclick="ui.openModal()">
+                <i class="fas fa-plus"></i>
+            </button>
         </section>
+
+        <section id="view-customer-portal" class="view hidden">
+            <header class="view-header">
+                <button onclick="ui.navigateTo('view-home')"><i class="fas fa-chevron-right"></i></button>
+                <h2>كشف حساب العميل</h2>
+            </header>
+            <div class="search-panel">
+                <input type="text" id="query-store-id" placeholder="كود المتجر">
+                <input type="tel" id="query-phone" placeholder="رقم هاتفك">
+                <button class="btn-action" onclick="app.customerQuery()">عرض ديوني</button>
+            </div>
+            <div id="query-results" class="results-area"></div>
+        </section>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <div class="modal">
+            <h3 id="modal-title">إضافة بيانات</h3>
+            <div id="modal-fields" class="fields-container"></div>
+            <div class="modal-btns">
+                <button class="btn-confirm" onclick="app.saveData()">حفظ</button>
+                <button class="btn-cancel" onclick="ui.closeModal()">إلغاء</button>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
